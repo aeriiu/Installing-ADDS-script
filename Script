@@ -1,0 +1,22 @@
+# Define variables
+$DomainName = "yourdomain.local"    # Change to your desired domain name
+$SafeModeAdminPassword = "P@ssw0rd!"  # Change to a strong password for Safe Mode Admin account
+$NetBIOSName = "YOURDOMAIN"          # Change to your desired NetBIOS name
+
+# Install the AD DS role
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+# Import the AD DS module
+Import-Module ADDSDeployment
+
+# Install a new forest
+Install-ADDSForest `
+    -DomainName $DomainName `
+    -DomainNetbiosName $NetBIOSName `
+    -SafeModeAdministratorPassword (ConvertTo-SecureString $SafeModeAdminPassword -AsPlainText -Force) `
+    -InstallDNS `
+    -Force
+
+# Optional: Restart the server after promotion
+# Restart-Computer
+
